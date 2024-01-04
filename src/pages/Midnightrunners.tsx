@@ -36,6 +36,7 @@ function Midnightrunnes() {
 
   const onCopy = () => {
     const html = document.getElementById('gamePlan')
+    html?.focus()
     console.log(html)
   }
 
