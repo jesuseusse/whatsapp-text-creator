@@ -57,7 +57,7 @@ function App() {
 
     if (textType === 'paragraph') textToAdd = <p>{textToAdd}</p>
     const newText = [...text, textToAdd]
-    setText(newText)
+    setText(newText as JSX.Element[])
     setInputText('')
   }
 
