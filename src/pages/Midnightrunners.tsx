@@ -1,54 +1,42 @@
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  SelectChangeEvent,
-  TextField,
-  Typography
-} from '@mui/material'
-import { Add } from '@mui/icons-material'
-import { ChangeEvent, useState } from 'react'
+import { Button, Container, Paper, TextField, Typography } from '@mui/material'
+import { useForm } from 'react-hook-form'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
+
+const fields: Record<string, string> = {
+  location: 'Ubicación',
+  date: 'Fecha',
+  time: 'Hora',
+  crew_on_board: 'Crew on board',
+  helpers: 'Apoyos',
+  mc: 'MC',
+  playlist: 'Descarga playlist y checar orden entre capis',
+  position_fast: 'Fast',
+  position_center: 'Centro',
+  positions_back: 'Escoba',
+  positions_float: 'Flotador',
+  warm_up_by: 'Warm-up by',
+  warm_up_location: 'Warm-up ubicación',
+  warm_up_song: 'Warm-up song',
+  stop_nro1_by: '1ra parada by',
+  stop_nro1_location: 'Ubicación',
+  stop_nro1_song: 'Song',
+  stop_nro2_by: '2da parada by',
+  stop_nro2_location: 'Ubicación',
+  stop_nro2_song: 'Song',
+  stop_nro3_by: '3da parada by',
+  stop_nro3_location: 'Ubicación',
+  stop_nro3_song: 'Song',
+  cool_down: 'Final Cool Down by',
+  cool_down_location: 'Ubicación',
+  cool_down_song: 'Song'
+}
 
 function Midnightrunnes() {
-  const [inputText, setInputText] = useState('')
-  const [text, setText] = useState<string[] | JSX.Element[]>([])
-  const [textType, setTextType] = useState('title')
-  const [textStyle, setStyle] = useState('normal')
+  const { register, watch } = useForm()
 
-  const onClickAdd = () => {
-    let textToAdd: string | JSX.Element = inputText
-    if (textStyle === 'normal') textToAdd = `${textToAdd}`
-    if (textStyle === 'bold') textToAdd = `*${textToAdd}*`
-    if (textStyle === 'subrayado') textToAdd = `~${textToAdd}~`
-    if (textStyle === 'cursive') textToAdd = `_${textToAdd}_`
-    if (textStyle === 'mono') textToAdd = '```' + textToAdd + '```'
-    textToAdd = ` ${textToAdd} `
-
-    if (textType === 'title')
-      textToAdd = (
-        <p>
-          {textToAdd}
-          <br />
-          <br />
-        </p>
-      )
-    if (textType === 'subtitle')
-      textToAdd = (
-        <p>
-          {textToAdd}
-          <br />
-        </p>
-      )
-
-    if (textType === 'paragraph') textToAdd = <p>{textToAdd}</p>
-    const newText = [...text, textToAdd]
-    setText(newText as JSX.Element[])
-    setInputText('')
+  const onCopy = () => {
+    const html = document.getElementById('gamePlan')
+    console.log(html)
   }
 
   return (
@@ -61,7 +49,9 @@ function Midnightrunnes() {
       >
         Template Game Plan
       </Typography>
+      <Button onClick={onCopy}>Copy</Button>
       <Paper
+        id="gamePlan"
         sx={{
           padding: 4,
           marginY: 2,
@@ -70,90 +60,52 @@ function Midnightrunnes() {
           boxSizing: 'border-box'
         }}
       >
-        {text.map((t) => t)}
+        <p>*Game Plan MR*</p>
+
+        {Object.keys(fields).map((fieldName) => {
+          return (
+            <>
+              *{fields[fieldName]}:* {watch(fieldName)}
+              <br />
+              {fieldName === 'positions_float' && <br />}
+              {fieldName === 'playlist' && <br />}
+              {fieldName === 'mc' && (
+                <>
+                  <br />
+                  _Bienvenida Comenzar con energía y hacer que los runners se
+                  prendan_ 🔈
+                  <br /> 1 - Quiénes llegaron nuevos
+                  <br /> 2 - En qué consiste MR.
+                  <br /> 3 - Quienes son los capis
+                  <br /> 4 - Los esperamos si corren, no esperamos si caminan
+                  (Reforzar) 🚨
+                  <br /> 5 - Indicar ruta
+                  <br /> 6 - Enfatizar reglas y cuidados antes de salir!
+                  <br /> Check-in: ¡Todos los capis vamos haciendo check-in a
+                  conocidos y hablamos con nuevos!
+                  <br />
+                </>
+              )}
+            </>
+          )
+        })}
       </Paper>
-      <TextField
-        sx={{
-          marginX: 1,
-          marginY: 2,
-          width: 'calc( 100% - 16px)'
-        }}
-        type="text"
-        label="Su texto"
-        multiline
-        variant="outlined"
-        fullWidth
-        value={inputText}
-        onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-          setInputText(e.target.value.trim())
-        }
-        onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (e.keyCode === 13) onClickAdd()
-        }}
-      />
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          '& > :not(style)': { m: 1, width: 'calc( 100% / 3 - 16px )' }
-        }}
-        component="form"
-        noValidate
-        autoComplete="off"
-      >
-        <FormControl fullWidth>
-          <InputLabel id="text-type">Tipo de texto</InputLabel>
-          <Select
-            labelId="text-type"
-            value={textType}
-            label="Tipo de texto"
-            onChange={(e: SelectChangeEvent<string>) => {
-              setTextType(e.target.value)
+      {Object.keys(fields).map((fieldName) => {
+        return (
+          <TextField
+            sx={{
+              marginX: 1,
+              marginY: 2,
+              width: 'calc( 100% - 16px)'
             }}
-          >
-            <MenuItem value={'title'}>Título</MenuItem>
-            <MenuItem value={'subtitle'}>Subtítulo</MenuItem>
-            <MenuItem value={'paragraph'}>Párrafo</MenuItem>
-            <MenuItem value={'text'}>Palabra u oración</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl fullWidth>
-          <InputLabel id="text-style">Estilo</InputLabel>
-          <Select
-            labelId="text-style"
-            value={textStyle}
-            label="Estilo"
-            onChange={(e: SelectChangeEvent<string>) => {
-              setStyle(e.target.value)
-            }}
-          >
-            <MenuItem value={'normal'}>normal</MenuItem>
-            <MenuItem value={'bold'}>
-              <Typography sx={{ fontWeight: 'bold' }}>Negrita</Typography>
-            </MenuItem>{' '}
-            <MenuItem value={'subrayado'}>
-              <Typography sx={{ textDecoration: 'line-through' }}>
-                Subrayado
-              </Typography>
-            </MenuItem>
-            <MenuItem value={'cursive'}>
-              <i>Cursiva</i>
-            </MenuItem>
-            <MenuItem value={'mono'}>
-              <Typography sx={{ fontFamily: 'Space Mono' }}>Mono</Typography>
-            </MenuItem>
-          </Select>
-        </FormControl>
-        <Button
-          variant="outlined"
-          sx={{ height: '56px' }}
-          disabled={inputText === ''}
-          onClick={onClickAdd}
-        >
-          <Add />
-        </Button>
-      </Box>
+            id="fieldName"
+            label={fields[fieldName]}
+            fullWidth
+            margin="dense"
+            {...register(fieldName)}
+          />
+        )
+      })}
     </Container>
   )
 }
