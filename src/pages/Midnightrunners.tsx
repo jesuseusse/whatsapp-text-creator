@@ -1,6 +1,13 @@
-import { Button, Container, Paper, TextField, Typography } from '@mui/material'
+import {
+  Button,
+  Container,
+  Paper,
+  Snackbar,
+  TextField,
+  Typography
+} from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
+import React, { useState } from 'react'
 
 const fields: Record<string, string> = {
   location: 'Ubicación',
@@ -33,15 +40,41 @@ const fields: Record<string, string> = {
 
 function Midnightrunnes() {
   const { register, watch } = useForm()
+  const [open, setOpen] = useState(false)
 
   const onCopy = () => {
-    const html = document.getElementById('gamePlan')
-    html?.focus()
-    console.log(html)
+    const editor = document.getElementById('gamePlan')
+    const selection = document.getSelection()
+    const range = document.createRange()
+    if (editor && selection) {
+      range.setStart(editor.childNodes[0], 0)
+      range.setEnd(editor.childNodes[editor.childNodes.length - 1], 0)
+      selection.removeAllRanges()
+      selection.addRange(range)
+      console.log(selection)
+      const s = window?.getSelection()
+      if (s) document.execCommand('copy')
+      setOpen(true)
+    }
+  }
+
+  const handleClose = (_: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpen(false)
   }
 
   return (
     <Container>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={open}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        message="Copiado"
+      />
       <Typography
         sx={{ margin: 2, fontSize: 48 }}
         variant="h1"
@@ -50,7 +83,9 @@ function Midnightrunnes() {
       >
         Template Game Plan
       </Typography>
-      <Button onClick={onCopy}>Copy</Button>
+      <Button onClick={onCopy} sx={{ width: '100%' }} variant="outlined">
+        Copy
+      </Button>
       <Paper
         id="gamePlan"
         sx={{
@@ -65,7 +100,7 @@ function Midnightrunnes() {
 
         {Object.keys(fields).map((fieldName) => {
           return (
-            <>
+            <React.Fragment key={fieldName}>
               *{fields[fieldName]}:* {watch(fieldName)}
               <br />
               {fieldName === 'positions_float' && <br />}
@@ -87,13 +122,14 @@ function Midnightrunnes() {
                   <br />
                 </>
               )}
-            </>
+            </React.Fragment>
           )
         })}
       </Paper>
       {Object.keys(fields).map((fieldName) => {
         return (
           <TextField
+            key={fieldName}
             sx={{
               marginX: 1,
               marginY: 2,
