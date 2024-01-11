@@ -7,7 +7,8 @@ import {
   Typography
 } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 const fields: Record<string, string> = {
   location: 'Ubicación',
@@ -39,8 +40,27 @@ const fields: Record<string, string> = {
 }
 
 function Midnightrunnes() {
-  const { register, watch } = useForm()
+  const useF = useForm()
+  const { register, watch, setValue, getValues } = useF
   const [open, setOpen] = useState(false)
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const watchers = Object.keys(fields).map((fieldName) => getValues(fieldName))
+
+  useEffect(() => {
+    const params: Record<string, string> = {}
+    Object.keys(fields).map((fieldName) => {
+      params[fieldName] = watch(fieldName)
+    })
+    setSearchParams(params)
+  }, [...watchers])
+
+  useEffect(() => {
+    for (const entry of searchParams.entries()) {
+      const [param, value] = entry
+      setValue(param, value)
+    }
+  }, [])
 
   const onCopy = () => {
     const editor = document.getElementById('gamePlan')
@@ -51,7 +71,6 @@ function Midnightrunnes() {
       range.setEnd(editor.childNodes[editor.childNodes.length - 1], 0)
       selection.removeAllRanges()
       selection.addRange(range)
-      console.log(selection)
       const s = window?.getSelection()
       if (s) document.execCommand('copy')
       setOpen(true)
