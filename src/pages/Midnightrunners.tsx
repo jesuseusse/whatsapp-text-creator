@@ -7,7 +7,7 @@ import {
   Typography
 } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 const fields: Record<string, string> = {
