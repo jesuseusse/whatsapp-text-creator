@@ -61,7 +61,9 @@ export const ChatWith = () => {
           }}
           variant="outlined"
           onClick={() => {
-            window.open('https://wa.me/' + inputText)
+            window.open(
+              `https://web.whatsapp.com/send/?phone=${inputText}&text&type=phone_number&app_absent=0`
+            )
           }}
         >
           Chat en Whatsapp
