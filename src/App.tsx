@@ -3,6 +3,7 @@ import Home from './pages/Home'
 import { ThemeProvider, createTheme } from '@mui/material'
 import { green, purple } from '@mui/material/colors'
 import Midnightrunnes from './pages/Midnightrunners'
+import { ChatWith } from './pages/ChatWith'
 
 const theme = createTheme({
   palette: {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: '/midnight-runners',
     element: <Midnightrunnes />
+  },
+  {
+    path: '/chat-with',
+    element: <ChatWith />
   }
 ])
 function App() {
