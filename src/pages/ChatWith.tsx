@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Button, Container, Paper, Typography } from '@mui/material';
 import { MuiPhone } from '../components/MiuPhoneInput';
+import { useNavigate } from 'react-router-dom';
 
 export const ChatWith = () => {
+	const navigate = useNavigate();
 	const [inputText, setInputText] = useState('');
 	//   const [text, setText] = useState<string[] | JSX.Element[]>([])
 	return (
@@ -74,6 +76,17 @@ export const ChatWith = () => {
 					}}
 				>
 					Chat en Whatsapp Web
+				</Button>
+				<Button
+					sx={{
+						marginX: 1,
+						marginY: 2,
+						width: 'calc( 100% - 16px)'
+					}}
+					variant='outlined'
+					onClick={() => navigate('/text-creator')}
+				>
+					Abrir Text Creator
 				</Button>
 			</Paper>
 		</Container>

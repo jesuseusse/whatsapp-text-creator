@@ -1,37 +1,37 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import Home from './pages/Home'
-import { ThemeProvider, createTheme } from '@mui/material'
-import { green, purple } from '@mui/material/colors'
-import Midnightrunnes from './pages/Midnightrunners'
-import { ChatWith } from './pages/ChatWith'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Home from './pages/TextCreator';
+import { ThemeProvider, createTheme } from '@mui/material';
+import { green, purple } from '@mui/material/colors';
+import Midnightrunnes from './pages/Midnightrunners';
+import { ChatWith } from './pages/ChatWith';
 
 const theme = createTheme({
-  palette: {
-    primary: green,
-    secondary: purple
-  }
-})
+	palette: {
+		primary: green,
+		secondary: purple
+	}
+});
 
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Home />
-  },
-  {
-    path: '/midnight-runners',
-    element: <Midnightrunnes />
-  },
-  {
-    path: '/chat-with',
-    element: <ChatWith />
-  }
-])
+	{
+		path: '/',
+		element: <ChatWith />
+	},
+	{
+		path: '/midnight-runners',
+		element: <Midnightrunnes />
+	},
+	{
+		path: '/text-creator',
+		element: <Home />
+	}
+]);
 function App() {
-  return (
-    <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
-    </ThemeProvider>
-  )
+	return (
+		<ThemeProvider theme={theme}>
+			<RouterProvider router={router} />
+		</ThemeProvider>
+	);
 }
 
-export default App
+export default App;
