@@ -127,8 +127,8 @@ function Midnightrunnes() {
 				{Object.keys(fields).map(fieldName => {
 					return (
 						<React.Fragment key={fieldName}>
-							{fieldName.includes('divider') ? '' : `*${fields[fieldName]}:*`}
-							{watch(fieldName)}
+							{fieldName.includes('divider') ? '' : ` *${fields[fieldName]}:* `}
+							{fieldName.includes('divider') ? '' : watch(fieldName)}
 							<br />
 							{fieldName.includes('divider') && <br />}
 							{fieldName === 'positions_float' && <br />}
